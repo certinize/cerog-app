@@ -2,36 +2,21 @@ import React from 'react'
 import 'semantic-ui-css/semantic.min.css'
 import { Container, Grid, Header } from 'semantic-ui-react'
 
+import { getLogEntries } from '../../api/LogEntryAPI'
 import AppSidebar from '../../components/AppSidebar'
 import AppTable from '../../components/AppTable'
 import './index.css'
 
 const Dashboard = () => {
-  // create a dataset, multiple items by 100
-  // randomize level
+  const [data, setData] = React.useState([])
 
-  const uuidv4 = () => {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
-      /[xy]/g,
-      function (c) {
-        const r = (Math.random() * 16) | 0
-        const v = c === 'x' ? r : (r & 0x3) | 0x8
-        return v.toString(16)
-      }
-    )
-  }
-
-  const dataset = []
-  for (let i = 0; i < 100; i++) {
-    dataset.push({
-      id: uuidv4(),
-      created_at: new Date().toISOString(),
-      message: 'This is a message',
-      raw: 'This is a raw message',
-      level: ['INFO', 'WARNING', 'ERROR'][Math.floor(Math.random() * 3)],
-      source: 'This is a source'
-    })
-  }
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const result = await getLogEntries('logs')
+      setData(result.logs)
+    }
+    fetchData()
+  }, [])
 
   return (
     <div>
@@ -52,7 +37,7 @@ const Dashboard = () => {
               </Grid.Row>
             </Grid>
             <div className="app-table">
-              <AppTable dataset={dataset} />
+              <AppTable dataset={data} />
             </div>
           </div>
         </div>

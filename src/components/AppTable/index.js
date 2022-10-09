@@ -4,6 +4,7 @@ import { Table } from 'semantic-ui-react'
 
 const AppTable = ({ dataset }) => {
   const rows = dataset.map((row, index) => {
+    const level = row.level.toUpperCase() || 'INFO'
     return (
       <Table.Row key={index}>
         <Table.Cell>{row.id}</Table.Cell>
@@ -11,11 +12,11 @@ const AppTable = ({ dataset }) => {
         <Table.Cell>{row.message}</Table.Cell>
         <Table.Cell>{row.raw}</Table.Cell>
         <Table.Cell
-          positive={row.level === 'INFO'}
-          negative={row.level === 'ERROR'}
-          warning={row.level === 'WARNING'}
+          positive={level === 'INFO'}
+          negative={level === 'ERROR' || level === 'CRITICAL'}
+          warning={level === 'WARNING'}
         >
-          {row.level}
+          {level}
         </Table.Cell>
         <Table.Cell>{row.source}</Table.Cell>
       </Table.Row>
